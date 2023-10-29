@@ -1,0 +1,80 @@
+//声明protobuf的版本
+syntax="proto3";
+
+package fixbug;//声明一个包，就是c++的一个命名空间
+
+//选项启用service服务，默认为false
+option cc_generic_services=true;
+
+// message LoginRequest
+// {
+//     // string name=1;
+//     // string pwd=2;
+
+//     //也可以利用 字节类型
+//     bytes name=1;
+//     bytes pwd=2;
+// }
+
+// message LoginRespond
+// {
+//     int32 errcode=1;
+//     //string errmsg=2;
+//     bytes errmsg=2;
+//     bool success=3;
+// }
+
+
+//结果的编码
+message ResultCode
+{
+    int32 errcode=1;
+    bytes errmsg=2;
+}
+
+message LoginRequest
+{
+    bytes name=1;
+    bytes pwd=2;
+}
+
+message LoginRespond
+{
+    ResultCode result=1;
+    bool success=2;
+}
+
+//获取朋友列表的请求
+message GetFriendListsRequest
+{
+    uint32 id=1;
+}
+
+message User
+{
+    bytes name=1;
+    uint32 age=2;
+    enum  SEX
+    {
+        MAN=0;
+        WOMAN=1;
+    }
+    SEX sex=3;
+}
+//好友的应答消息
+message GetFriendListsRespond
+{
+    ResultCode result=1;
+    //repeated表示重复的，创建一个列表
+    repeated User friend_list=2;
+}
+
+service UserServiceRpc
+{
+    rpc Login(LoginRequest)returns(LoginRespond);
+
+    rpc GetFriendList(GetFriendListsRequest)returns(GetFriendListsRespond);
+
+}
+
+
